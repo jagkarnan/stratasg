@@ -44,7 +44,7 @@ export function Header() {
             <Button
               asChild
               size="sm"
-              className="flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              className="flex items-center gap-2 bg-secondary text-white hover:bg-secondary/90"
             >
               <a
                 href="https://wa.me/6581888935?text=Strata.sg%20Website%20-%20I%20am%20interested%20in%20your%20renovation%20services.%20Please%20contact%20me."
