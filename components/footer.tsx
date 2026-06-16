@@ -100,9 +100,9 @@ export function Footer() {
               <div className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-secondary mt-0.5" />
                 <span className="text-primary-foreground/80 text-sm">
-                  540 Sims Avenue,
+                  60 Paya Lebar Road,
                   <br />
-                  Singapore 387603
+                  Singapore 409051
                 </span>
               </div>
             </div>

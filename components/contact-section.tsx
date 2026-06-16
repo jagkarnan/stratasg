@@ -124,7 +124,7 @@ export function ContactSection() {
     {
       icon: MapPin,
       title: "Our Office",
-      details: ["540 Sims Avenue", "Singapore 387603", "By appointment only"],
+      details: ["60 Paya Lebar Road,", "Singapore 409051", "By appointment only"],
       action: null, // Removed Get Directions button
       href: null,
       showOnMobile: false,
@@ -356,14 +356,14 @@ export function ContactSection() {
             <CardContent className="p-0">
               <div className="aspect-[16/9] rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7793234567!2d103.8776!3d1.3138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19d8b6b5b5b5%3A0x1234567890abcdef!2s540%20Sims%20Ave%2C%20Singapore%20387603!5e0!3m2!1sen!2ssg!4v1234567890123!5m2!1sen!2ssg"
+                  src="https://www.google.com/maps?q=60%20Paya%20Lebar%20Road%2C%20Singapore%20409051&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Strata.SG Office Location - 540 Sims Avenue, Singapore 387603"
+                  title="Strata.SG Office Location - 60 Paya Lebar Road, Singapore 409051"
                 />
               </div>
             </CardContent>
