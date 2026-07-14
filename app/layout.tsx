@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { Suspense } from "react"
 import Script from "next/script"
 import FloatingWhatsApp from "@/components/floating-whatsapp"
+import { MarketingTags } from "@/components/marketing-tags"
 import "./globals.css"
 
 const inter = Inter({
@@ -12,6 +13,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.strata.sg"),
   title: "Strata.SG - Singapore Renovation Company | HDB & Condo Specialists",
   description:
     "Professional renovation services in Singapore. From HDB to condos to commercial spaces - we deliver quality, on-time, and stress-free renovation solutions.",
@@ -47,18 +49,16 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Outbound Click Conversion Tracker: WhatsApp, tel:, any external link */}
+        {/* High-intent contact conversion tracker: WhatsApp and phone only */}
         <Script id="outbound-click-tracker" strategy="afterInteractive">
           {`
             document.addEventListener('click', function(e) {
               var el = e.target && (e.target.closest ? e.target.closest('a') : null);
               if (!el) return;
               var href = el.getAttribute('href') || '';
-              var hostOk = typeof el.hostname === 'string';
-              var isOutbound = hostOk && el.hostname !== window.location.hostname;
               var isWhatsApp = href.includes('wa.me') || href.includes('api.whatsapp.com');
               var isCall = href.startsWith('tel:');
-              if (isOutbound || isWhatsApp || isCall) {
+              if (isWhatsApp || isCall) {
                 if (typeof gtag === 'function') {
                   gtag('event', 'conversion', {
                     send_to: 'AW-17630860223/jOHWCKGV7KwbEL-nhtdB'
@@ -70,6 +70,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="bg-white">
+        <MarketingTags />
         <Suspense fallback={<div>Loading...</div>}>
           {children}
           <FloatingWhatsApp />
