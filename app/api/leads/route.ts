@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
   const webhookUrl = process.env.LEADS_WEBHOOK_URL
   const brevoKey = process.env.BREVO_API_KEY
   const brevoListId = Number(process.env.BREVO_LIST_ID || "9")
-  const brevoFrom = process.env.STRATA_BREVO_FROM || "jag.karnan@gmail.com"
+  const brevoFrom = process.env.STRATA_BREVO_FROM || "hello@strata.sg"
   const leadInbox = process.env.STRATA_LEADS_EMAIL
   const deliveryTasks: Promise<unknown>[] = []
 
