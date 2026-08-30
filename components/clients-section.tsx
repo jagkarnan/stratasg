@@ -10,6 +10,7 @@ const clients = [
   { name: "YDL Construction", logo: "/images/clients/ydl-construction.png", width: 284, height: 79 },
   { name: "Anglo Chinese School", logo: "/images/clients/anglo-chinese-school.png", width: 269, height: 281 },
   { name: "North London Collegiate", logo: "/images/clients/north-london-collegiate.png", width: 738, height: 303 },
+  { name: "Advanca", logo: "/images/clients/advanca.png", width: 800, height: 500 },
   { name: "Euroworld ACD" },
   { name: "True Harmony", logo: "/images/clients/true-harmony.png", width: 432, height: 128 },
 ] as { name: string; logo?: string; width?: number; height?: number }[]
