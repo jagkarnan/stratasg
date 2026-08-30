@@ -22,6 +22,11 @@ const GoogleReviewsSection = dynamic(
   { loading: () => <div className="min-h-[400px] animate-pulse bg-muted" /> }
 )
 
+const ClientsSection = dynamic(
+  () => import("@/components/clients-section").then((mod) => ({ default: mod.ClientsSection })),
+  { loading: () => <div className="min-h-[400px] animate-pulse bg-muted" /> }
+)
+
 const ServicesSection = dynamic(
   () => import("@/components/services-section").then((mod) => ({ default: mod.ServicesSection })),
   { loading: () => <div className="min-h-[500px] animate-pulse bg-muted" /> }
@@ -178,6 +183,8 @@ export default function HomePage() {
       <IntroCTASection />
       <SectionSeparator />
       <OurStorySection />
+      <SectionSeparator />
+      <ClientsSection />
       <SectionSeparator />
       <OurProjectsSection />
       <SectionSeparator />
