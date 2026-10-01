@@ -58,6 +58,9 @@ export default function RootLayout({
               var href = el.getAttribute('href') || '';
               var isWhatsApp = href.includes('wa.me') || href.includes('api.whatsapp.com');
               var isCall = href.startsWith('tel:');
+              if (isWhatsApp && window.fbq) {
+                window.fbq('track', 'Contact');
+              }
               if (isWhatsApp || isCall) {
                 if (typeof gtag === 'function') {
                   gtag('event', 'conversion', {

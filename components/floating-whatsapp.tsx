@@ -7,6 +7,9 @@ export default function FloatingWhatsApp() {
   const message = "Strata.sg Website - I am interested in your renovation services. Please contact me."
 
   const handleWhatsAppClick = () => {
+    if (window.fbq) {
+      window.fbq("track", "Contact")
+    }
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
