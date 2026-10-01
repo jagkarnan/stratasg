@@ -1,13 +1,12 @@
 import Script from "next/script"
 
-const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+const metaPixelId = "1747241863174318"
 const linkedInPartnerId = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID
 
 export function MarketingTags() {
   return (
     <>
-      {metaPixelId ? (
-        <>
+      <>
           <Script id="meta-pixel" strategy="afterInteractive">
             {`
               !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -29,8 +28,7 @@ export function MarketingTags() {
               alt=""
             />
           </noscript>
-        </>
-      ) : null}
+      </>
 
       {linkedInPartnerId ? (
         <>
