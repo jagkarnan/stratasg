@@ -6,7 +6,7 @@ type Email = {
   reply_to?: string
 }
 
-export const SENDER_ADDRESS = process.env.RESEND_FROM || "contact@strata.sg"
+export const SENDER_ADDRESS = process.env.RESEND_FROM || "sender@strata.sg"
 export const INBOX = "contact@strata.sg"
 
 export function sendEmail(apiKey: string, email: Email) {
