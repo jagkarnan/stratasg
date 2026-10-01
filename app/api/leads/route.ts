@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
+import { INBOX, SENDER_ADDRESS, sendEmail } from "@/lib/send-email"
 
 const leadSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -40,23 +41,6 @@ function escapeHtml(value: string | number | undefined) {
     .replaceAll("'", "&#039;")
 }
 
-async function brevoRequest(path: string, apiKey: string, body: unknown) {
-  const response = await fetch(`https://api.brevo.com/v3${path}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "api-key": apiKey,
-    },
-    body: JSON.stringify(body),
-  })
-
-  if (!response.ok) {
-    const message = await response.text().catch(() => "")
-    throw new Error(`Brevo request failed: ${response.status} ${message.slice(0, 300)}`)
-  }
-}
-
 export async function POST(request: NextRequest) {
   const parsed = leadSchema.safeParse(await request.json().catch(() => null))
   if (!parsed.success) {
@@ -70,10 +54,7 @@ export async function POST(request: NextRequest) {
   const submittedAt = new Date().toISOString()
 
   const webhookUrl = process.env.LEADS_WEBHOOK_URL
-  const brevoKey = process.env.BREVO_API_KEY
-  const brevoListId = Number(process.env.BREVO_LIST_ID || "9")
-  const brevoFrom = process.env.STRATA_BREVO_FROM || "hello@strata.sg"
-  const leadInbox = process.env.STRATA_LEADS_EMAIL
+  const resendKey = process.env.RESEND_API_KEY
   const deliveryTasks: Promise<unknown>[] = []
 
   if (webhookUrl) {
@@ -88,7 +69,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (brevoKey && leadInbox) {
+  if (resendKey) {
     const details = [
       ["Lead score", `${score}/100${qualified ? " - QUALIFIED" : ""}`],
       ["Name", lead.name], ["Phone", lead.phone], ["Email", lead.email],
@@ -98,25 +79,19 @@ export async function POST(request: NextRequest) {
     ]
 
     deliveryTasks.push(
-      brevoRequest("/contacts", brevoKey, {
-        email: lead.email,
-        listIds: [brevoListId],
-        updateEnabled: true,
-        attributes: { FIRSTNAME: lead.name },
-      }),
-      brevoRequest("/smtp/email", brevoKey, {
-        sender: { name: "Strata.sg Leads", email: brevoFrom },
-        to: [{ email: leadInbox }],
-        replyTo: { email: lead.email, name: lead.name },
+      sendEmail(resendKey, {
+        from: `Strata.sg Leads <${SENDER_ADDRESS}>`,
+        to: [INBOX],
+        reply_to: lead.email,
         subject: `${qualified ? "[QUALIFIED] " : ""}${lead.propertyType} lead - ${lead.name}`,
-        htmlContent: `<h2>New Strata.sg renovation lead</h2><table>${details.map(([key, value]) => `<tr><td style="padding:6px 16px 6px 0"><strong>${escapeHtml(key)}</strong></td><td>${escapeHtml(value)}</td></tr>`).join("")}</table><p><a href="https://wa.me/${lead.phone.replace(/\D/g, "")}">Reply on WhatsApp</a></p><p>Lead ID: ${leadId}<br>Submitted: ${submittedAt}</p>`,
+        html: `<h2>New Strata.sg renovation lead</h2><table>${details.map(([key, value]) => `<tr><td style="padding:6px 16px 6px 0"><strong>${escapeHtml(key)}</strong></td><td>${escapeHtml(value)}</td></tr>`).join("")}</table><p><a href="https://wa.me/${lead.phone.replace(/\D/g, "")}">Reply on WhatsApp</a></p><p>Lead ID: ${leadId}<br>Submitted: ${submittedAt}</p>`,
       }),
-      brevoRequest("/smtp/email", brevoKey, {
-        sender: { name: "Strata.sg Pte Ltd", email: brevoFrom },
-        to: [{ email: lead.email, name: lead.name }],
-        replyTo: { email: leadInbox, name: "Strata.sg Pte Ltd" },
+      sendEmail(resendKey, {
+        from: `Strata.sg Pte Ltd <${SENDER_ADDRESS}>`,
+        to: [lead.email],
+        reply_to: INBOX,
         subject: "Your Singapore condo renovation planner",
-        htmlContent: `<div style="max-width:620px;margin:auto;font-family:Arial,sans-serif;color:#1f2933"><p style="font-size:13px;letter-spacing:.12em;color:#8a6a3f">STRATA.SG</p><h1>Your renovation planner is ready</h1><p>Hi ${escapeHtml(lead.name)},</p><p>Thanks for requesting the Strata condo renovation planner. It covers budget ranges, approval checkpoints and the decisions that keep a full renovation on schedule.</p><p style="margin:28px 0"><a href="https://www.strata.sg/downloads/strata-condo-renovation-planner-2026.pdf" style="background:#0f3d35;color:#fff;text-decoration:none;padding:14px 22px;border-radius:8px;font-weight:bold">Download the renovation planner</a></p><p>Planning a full condo or landed-home renovation? Reply to this email or WhatsApp us to discuss your property, timeline and budget.</p><p style="margin:28px 0"><a href="https://wa.me/6581888935" style="background:#25D366;color:#10231d;text-decoration:none;padding:14px 22px;border-radius:8px;font-weight:bold">WhatsApp +65 8188 8935</a></p></div>`,
+        html: `<div style="max-width:620px;margin:auto;font-family:Arial,sans-serif;color:#1f2933"><p style="font-size:13px;letter-spacing:.12em;color:#8a6a3f">STRATA.SG</p><h1>Your renovation planner is ready</h1><p>Hi ${escapeHtml(lead.name)},</p><p>Thanks for requesting the Strata condo renovation planner. It covers budget ranges, approval checkpoints and the decisions that keep a full renovation on schedule.</p><p style="margin:28px 0"><a href="https://www.strata.sg/downloads/strata-condo-renovation-planner-2026.pdf" style="background:#0f3d35;color:#fff;text-decoration:none;padding:14px 22px;border-radius:8px;font-weight:bold">Download the renovation planner</a></p><p>Planning a full condo or landed-home renovation? Reply to this email or WhatsApp us to discuss your property, timeline and budget.</p><p style="margin:28px 0"><a href="https://wa.me/6581888935" style="background:#25D366;color:#10231d;text-decoration:none;padding:14px 22px;border-radius:8px;font-weight:bold">WhatsApp +65 8188 8935</a></p></div>`,
       }),
     )
   }
