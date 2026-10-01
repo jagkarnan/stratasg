@@ -52,14 +52,18 @@ export default function RootLayout({
         {/* High-intent contact conversion tracker: WhatsApp and phone only */}
         <Script id="outbound-click-tracker" strategy="afterInteractive">
           {`
+            if (!window.__strataOutboundClickTrackerInstalled) {
+            window.__strataOutboundClickTrackerInstalled = true;
             document.addEventListener('click', function(e) {
               var el = e.target && (e.target.closest ? e.target.closest('a') : null);
               if (!el) return;
               var href = el.getAttribute('href') || '';
-              var isWhatsApp = href.includes('wa.me') || href.includes('api.whatsapp.com');
+              var url;
+              try { url = new URL(href, window.location.href); } catch (_) { return; }
+              var isWhatsApp = url.hostname === 'wa.me' || url.hostname === 'api.whatsapp.com';
               var isCall = href.startsWith('tel:');
               if (isWhatsApp && window.fbq) {
-                window.fbq('track', 'Contact');
+                window.fbq('trackSingle', '1747241863174318', 'Contact');
               }
               if (isWhatsApp || isCall) {
                 if (typeof gtag === 'function') {
@@ -69,6 +73,7 @@ export default function RootLayout({
                 }
               }
             });
+            }
           `}
         </Script>
       </head>
