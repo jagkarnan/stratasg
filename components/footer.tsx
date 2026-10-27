@@ -18,6 +18,7 @@ export function Footer() {
     { name: "Interior Design Singapore", href: "/interior-design-singapore" },
     { name: "Renovation Contractor Singapore", href: "/renovation-contractor-singapore" },
     { name: "Condo Renovation East Singapore", href: "/condo-renovation-east-singapore" },
+    { name: "Renovation Enquiry", href: "/renovation-enquiry" },
     { name: "Contact Us", href: "/contact" },
     { name: "FAQ", href: "/contact#faq" },
   ]
