@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
@@ -6,9 +7,11 @@ export function CTAButtons() {
     <section className="py-6 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-lg px-8 py-4">
+          <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-lg px-8 py-4" asChild>
+            <Link href="/renovation-enquiry">
             Get a Free Quote
             <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
           </Button>
           <Button
             variant="outline"
