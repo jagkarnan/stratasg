@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, ReactNode, useEffect, useRef, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react"
 import { COUNTRIES, DEFAULT_COUNTRY } from "@/lib/countries"
@@ -69,8 +69,8 @@ function CountryPicker({ value, onChange }: { value: { name: string; code: strin
   )
 }
 
-export function FbEnquiry({ intro }: { intro: ReactNode }) {
-  const [step, setStep] = useState(0) // 0 = intro, 1-3 = form screens
+export function FbEnquiry() {
+  const [step, setStep] = useState(1) // form screens 1-3
   const direction = useRef(1) // 1 = moving forward: screen scrolls up
   const [form, setForm] = useState(empty)
   const [country, setCountry] = useState(DEFAULT_COUNTRY)
@@ -127,23 +127,16 @@ export function FbEnquiry({ intro }: { intro: ReactNode }) {
     }
   }
 
-  if (step === 0) {
-    return (
-      <>
-        {intro}
-        <button type="button" onClick={() => go(1)} className={cta}>
-          Find out if we&apos;re a fit <ArrowRight className="size-5" />
-        </button>
-      </>
-    )
-  }
-
   return (
     <form onSubmit={submit} className="mx-auto max-w-md space-y-5 rounded-2xl bg-white p-6 text-[#10263d] shadow-xl">
       <div className="flex items-center justify-between text-xs font-medium text-slate-500">
-        <button type="button" onClick={() => go(step - 1)} className="inline-flex items-center gap-1" aria-label="Back">
-          <ArrowLeft className="size-4" /> Back
-        </button>
+        {step > 1 ? (
+          <button type="button" onClick={() => go(step - 1)} className="inline-flex items-center gap-1" aria-label="Back">
+            <ArrowLeft className="size-4" /> Back
+          </button>
+        ) : (
+          <span />
+        )}
         <span>Step {step} of 3</span>
       </div>
       <div className="h-1 rounded bg-slate-100"><div className="h-1 rounded bg-[#b98b3c] transition-all" style={{ width: `${(step / 3) * 100}%` }} /></div>
