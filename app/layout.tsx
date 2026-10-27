@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { Suspense } from "react"
 import Script from "next/script"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import FloatingWhatsApp from "@/components/floating-whatsapp"
 import { MarketingTags } from "@/components/marketing-tags"
 import "./globals.css"
@@ -83,6 +84,7 @@ export default function RootLayout({
           {children}
           <FloatingWhatsApp />
         </Suspense>
+        <SpeedInsights />
       </body>
     </html>
   )
